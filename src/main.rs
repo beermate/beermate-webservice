@@ -1,13 +1,10 @@
 extern crate iron;
+extern crate router;
 
 use iron::prelude::*;
-use iron::status;
+
+mod resources;
 
 fn main() {
-    fn hello_world(_: &mut Request) -> IronResult<Response> {
-        Ok(Response::with((status::Ok, "Hello World!")))
-    }
-
-    Iron::new(hello_world).http("localhost:3000").unwrap();
-    println!("On 3000");
+    Iron::new(resources::get_routes()).http("127.0.0.1:3000").unwrap();
 }
