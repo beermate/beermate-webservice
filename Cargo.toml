@@ -1,9 +1,11 @@
 [package]
 name = "beermate-webservice"
 version = "0.1.0"
-authors = ["Thomas Schedler <thomas@chirimoya.at>"]
+authors = ["Daniel Rotter <daniel.rotter@gmail.com>", "Thomas Schedler <thomas@chirimoya.at>"]
 
 [dependencies]
 iron = "*"
 router = "*"
+websocket = "*"
 rustc-serialize = "*"
+deque = "*"
