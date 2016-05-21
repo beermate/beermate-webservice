@@ -6,3 +6,4 @@ authors = ["Thomas Schedler <thomas@chirimoya.at>"]
 [dependencies]
 iron = "*"
 router = "*"
+rustc-serialize = "*"
