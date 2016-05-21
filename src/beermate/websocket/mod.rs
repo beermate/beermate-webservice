@@ -1,4 +1,5 @@
 extern crate deque;
+extern crate rand;
 
 use beermate::Mat;
 use deque::Stealer;
@@ -9,6 +10,7 @@ use std::time::Duration;
 use websocket::{Message, Sender, Server};
 use websocket::sender;
 use websocket::stream::WebSocketStream;
+use self::rand::Rng;
 
 pub fn websocket_server_start() {
     let server = Server::bind("127.0.0.1:2794").unwrap();
@@ -17,9 +19,11 @@ pub fn websocket_server_start() {
 
     // TODO remove when we get some real data
     thread::spawn(move || {
+        let mut rng = rand::thread_rng();
+
         while true {
-            println!("pushed value");
-            let mat = Mat{id: 1, level: 0.74, beer_on_mat: true};
+            let level = rng.gen_range(0., 1.);
+            let mat = Mat{id: 1, level: level, beer_on_mat: true};
             worker.push(mat);
             thread::sleep(Duration::new(10, 0));
         }
