@@ -19,5 +19,5 @@ fn main() {
         websocket_server_start(stealer)
     });
 
-    Iron::new(resources::get_routes(worker)).http("192.168.0.138:3000").unwrap();
+    Iron::new(resources::get_routes(worker)).http("0.0.0.0:3000").unwrap();
 }

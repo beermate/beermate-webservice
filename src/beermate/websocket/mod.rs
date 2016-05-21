@@ -8,7 +8,7 @@ use websocket::sender;
 use websocket::stream::WebSocketStream;
 
 pub fn websocket_server_start(stealer: Stealer<Mat>) {
-    let server = Server::bind("192.168.0.138:2794").unwrap();
+    let server = Server::bind("0.0.0.0:2794").unwrap();
 
     for connection in server {
         let stealer = stealer.clone();
@@ -28,7 +28,7 @@ pub fn websocket_server_start(stealer: Stealer<Mat>) {
 }
 
 fn start_connection(sender: &mut sender::Sender<WebSocketStream>, stealer: Stealer<Mat>) {
-    while true {
+    loop {
         let message = stealer.steal();
 
         match message {

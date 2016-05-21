@@ -18,6 +18,7 @@ pub fn get_routes(worker: Worker<Mat>) -> Router {
             let worker = shared_worker.lock().unwrap();
             let mut payload = String::new();
             request.body.read_to_string(&mut payload).unwrap();
+            println!("request data: {}", payload);
             let mat: Mat = json::decode(&payload).unwrap();
             worker.push(mat);
             index(request)
