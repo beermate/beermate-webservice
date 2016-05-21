@@ -6,16 +6,20 @@ use iron::modifiers;
 use iron::headers;
 use router::Router;
 use rustc_serialize::json;
+use std::io::Read;
 use std::sync::Mutex;
 
 pub fn get_routes(worker: Worker<Mat>) -> Router {
     let mut router = Router::new();
     let shared_worker: Mutex<Worker<Mat>> = Mutex::new(worker);
-    router.get(
+    router.post(
         "/",
         move |request: &mut Request| {
             let worker = shared_worker.lock().unwrap();
-            worker.push(Mat{id: 1, level: 0.73, beer_on_mat: true});
+            let mut payload = String::new();
+            request.body.read_to_string(&mut payload).unwrap();
+            let mat: Mat = json::decode(&payload).unwrap();
+            worker.push(mat);
             index(request)
         }
     );
