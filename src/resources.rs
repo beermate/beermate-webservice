@@ -6,12 +6,16 @@ use iron::modifiers;
 use iron::headers;
 use router::Router;
 use rustc_serialize::json;
+use std::sync::Mutex;
 
 pub fn get_routes(worker: Worker<Mat>) -> Router {
     let mut router = Router::new();
+    let shared_worker: Mutex<Worker<Mat>> = Mutex::new(worker);
     router.get(
         "/",
-        |request: &mut Request| {
+        move |request: &mut Request| {
+            let worker = shared_worker.lock().unwrap();
+            worker.push(Mat{id: 1, level: 0.73, beer_on_mat: true});
             index(request)
         }
     );
