@@ -6,3 +6,4 @@ authors = ["Thomas Schedler <thomas@chirimoya.at>"]
 [dependencies]
 websocket = "0.17.*"
 rustc-serialize = "0.3.*"
+deque = "0.3.*"

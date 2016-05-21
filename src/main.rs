@@ -1,45 +1,14 @@
-extern crate rustc_serialize;
+extern crate deque;
 extern crate websocket;
+extern crate rustc_serialize;
 
-use rustc_serialize::json;
+use beermate::websocket::websocket_server_start;
 use std::thread;
-use websocket::{Server, Message, Sender, Receiver};
-use websocket::message::Type;
 
-#[derive(RustcEncodable)]
-struct Matt {
-    id: u32,
-    level: f32,
-    beer_on_matt: bool
-}
+mod beermate;
 
 fn main() {
-    let server = Server::bind("127.0.0.1:2794").unwrap();
+    let websocket_thread = thread::spawn(websocket_server_start);
 
-    for connection in server {
-        thread::spawn(move || {
-            let request = connection.unwrap().read_request().unwrap();
-            request.validate().unwrap();
-
-            let response = request.accept();
-            let client = response.send().unwrap();
-
-            let (mut sender, mut receiver) = client.split();
-
-            for message in receiver.incoming_messages() {
-                let message: Message = message.unwrap();
-
-                match message.opcode {
-                    Type::Text => {
-                        let message = Message::text(json::encode(&Matt{id: 1, level: 0.74, beer_on_matt: false}).unwrap());
-                        sender.send_message(&message).unwrap();
-                    },
-                    _ => {
-                        let message = Message::text("Wrong opcode".to_string());
-                        sender.send_message(&message).unwrap();
-                    }
-                }
-            }
-        });
-    }
+    websocket_thread.join().unwrap();
 }
