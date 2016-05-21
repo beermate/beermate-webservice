@@ -1,29 +1,14 @@
-extern crate deque;
-
 use beermate::Mat;
-use deque::Stealer;
+use deque::{Stealer};
 use deque::Stolen;
 use rustc_serialize::json;
 use std::thread;
-use std::time::Duration;
 use websocket::{Message, Sender, Server};
 use websocket::sender;
 use websocket::stream::WebSocketStream;
 
-pub fn websocket_server_start() {
+pub fn websocket_server_start(stealer: Stealer<Mat>) {
     let server = Server::bind("127.0.0.1:2794").unwrap();
-
-    let (worker, stealer) = deque::new::<Mat>();
-
-    // TODO remove when we get some real data
-    thread::spawn(move || {
-        while true {
-            println!("pushed value");
-            let mat = Mat{id: 1, level: 0.74, beer_on_mat: true};
-            worker.push(mat);
-            thread::sleep(Duration::new(10, 0));
-        }
-    });
 
     for connection in server {
         let stealer = stealer.clone();

@@ -1,10 +1,17 @@
+use beermate::Mat;
+use deque::Worker;
 use iron::prelude::*;
 use iron::status;
 use router::Router;
 
-pub fn get_routes() -> Router {
+pub fn get_routes(worker: Worker<Mat>) -> Router {
     let mut router = Router::new();
-    router.get("/", index);
+    router.get(
+        "/",
+        |request: &mut Request| {
+            index(request)
+        }
+    );
     router.get("/:query", handler);
     return router;
 }
